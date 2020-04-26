@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WorkScheduler.Context;
 using WorkScheduler.Models;
+using WorkScheduler.Services;
+using WorkScheduler.Services.Interfaces;
 
 namespace WorkScheduler
 {
@@ -31,7 +33,8 @@ namespace WorkScheduler
                 builder.UseSqlServer(Configuration["DefaultConnection"]);
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<EFCContext>();
+            services.AddIdentity<UserModel, IdentityRole>().AddEntityFrameworkStores<EFCContext>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddMvc();
         }
 
@@ -47,7 +50,7 @@ namespace WorkScheduler
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseStaticFiles();            
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();

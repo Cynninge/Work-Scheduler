@@ -1,2 +1,2 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<root><DefaultConnection>Data Source=.\SQLEXPRESS;Initial Catalog=WorkSchedulerDb;Integrated Security=True</DefaultConnection></root>
+<root><DefaultConnection>Data Source=.\SQLEXPRESS;Initial Catalog=WorkSchedulerDb;Integrated Security=True;MultipleActiveResultSets=true;</DefaultConnection></root>

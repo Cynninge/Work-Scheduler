@@ -10,7 +10,7 @@ using WorkScheduler.Context;
 namespace WorkScheduler.Migrations
 {
     [DbContext(typeof(EFCContext))]
-    [Migration("20200415190331_Initial")]
+    [Migration("20200425220126_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,71 +70,6 @@ namespace WorkScheduler.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -219,7 +154,7 @@ namespace WorkScheduler.Migrations
 
             modelBuilder.Entity("WorkScheduler.Models.CompanyModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CompanyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -248,40 +183,14 @@ namespace WorkScheduler.Migrations
                     b.Property<string>("StreetAndNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CompanyId");
 
                     b.ToTable("Company");
                 });
 
-            modelBuilder.Entity("WorkScheduler.Models.DayModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsItHoliday")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("WeekModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WeekModelId");
-
-                    b.ToTable("Days");
-                });
-
             modelBuilder.Entity("WorkScheduler.Models.DepartmentModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -295,7 +204,7 @@ namespace WorkScheduler.Migrations
                     b.Property<string>("ShortName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("DepartmentId");
 
                     b.HasIndex("CompanyId");
 
@@ -304,15 +213,14 @@ namespace WorkScheduler.Migrations
 
             modelBuilder.Entity("WorkScheduler.Models.UserModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
@@ -322,12 +230,13 @@ namespace WorkScheduler.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("EndWorkHour")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -346,10 +255,12 @@ namespace WorkScheduler.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<int>("OverHours")
                         .HasColumnType("int");
@@ -372,14 +283,12 @@ namespace WorkScheduler.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StartWorkHour")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<int>("WorkTimePerWeek")
                         .HasColumnType("int");
@@ -388,32 +297,55 @@ namespace WorkScheduler.Migrations
 
                     b.HasIndex("DepartmentId");
 
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
                     b.HasIndex("RoleNameId");
 
-                    b.ToTable("UserModel");
+                    b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WorkScheduler.Models.WeekModel", b =>
+            modelBuilder.Entity("WorkScheduler.Models.WorkHoursModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("WorkHoursId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<string>("AdditionalInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("EndHour")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("EndMinutes")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("StartHour")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("StartMinutes")
+                        .HasColumnType("int");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasKey("WorkHoursId");
 
-                    b.ToTable("Weeks");
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("WorkHours");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -427,7 +359,7 @@ namespace WorkScheduler.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WorkScheduler.Models.UserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -436,7 +368,7 @@ namespace WorkScheduler.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WorkScheduler.Models.UserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -451,7 +383,7 @@ namespace WorkScheduler.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WorkScheduler.Models.UserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -460,18 +392,11 @@ namespace WorkScheduler.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WorkScheduler.Models.UserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WorkScheduler.Models.DayModel", b =>
-                {
-                    b.HasOne("WorkScheduler.Models.WeekModel", null)
-                        .WithMany("Days")
-                        .HasForeignKey("WeekModelId");
                 });
 
             modelBuilder.Entity("WorkScheduler.Models.DepartmentModel", b =>
@@ -484,7 +409,7 @@ namespace WorkScheduler.Migrations
             modelBuilder.Entity("WorkScheduler.Models.UserModel", b =>
                 {
                     b.HasOne("WorkScheduler.Models.DepartmentModel", "Department")
-                        .WithMany("Users")
+                        .WithMany("Employees")
                         .HasForeignKey("DepartmentId");
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "RoleName")
@@ -492,11 +417,11 @@ namespace WorkScheduler.Migrations
                         .HasForeignKey("RoleNameId");
                 });
 
-            modelBuilder.Entity("WorkScheduler.Models.WeekModel", b =>
+            modelBuilder.Entity("WorkScheduler.Models.WorkHoursModel", b =>
                 {
-                    b.HasOne("WorkScheduler.Models.DepartmentModel", "Department")
-                        .WithMany("Weeks")
-                        .HasForeignKey("DepartmentId");
+                    b.HasOne("WorkScheduler.Models.UserModel", "Employee")
+                        .WithMany("WorkHours")
+                        .HasForeignKey("EmployeeId");
                 });
 #pragma warning restore 612, 618
         }

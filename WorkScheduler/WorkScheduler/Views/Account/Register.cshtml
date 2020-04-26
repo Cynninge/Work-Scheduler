@@ -22,11 +22,16 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Initials" class="control-label">Inicjały</label>
+                <input asp-for="Initials" class="form-control" />
+                <span asp-validation-for="Initials" class="text-danger"></span>
+            </div>
             @*<div class="form-group">
-                    <label asp-for="UserName" class="control-label">EMail</label>
-                    <input asp-for="UserName" class="form-control" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>*@
+            <label asp-for="UserName" class="control-label">EMail</label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <label asp-for="Email" class="control-label">Email</label>
                 <input asp-for="Email" class="form-control" />
@@ -38,10 +43,11 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RepeatPassword" class="control-label">RepeatPassword</label>
+                <label asp-for="RepeatPassword" class="control-label">Repeat Password</label>
                 <input asp-for="RepeatPassword" class="form-control" type="password" />
                 <span asp-validation-for="RepeatPassword" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

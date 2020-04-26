@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorkScheduler.Models
 {
     public class CompanyModel
     {
-        public int Id { get; set; }
+        [Key]
+        public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string Logo { get; set; }
         public string StreetAndNumber { get; set; }

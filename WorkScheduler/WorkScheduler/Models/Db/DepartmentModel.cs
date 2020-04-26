@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorkScheduler.Models
 {
     public class DepartmentModel
     {
-        public int Id { get; set; }
+        [Key]
+        public int DepartmentId { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
-        [NotMapped]
-        public UserModel Manager { get; set; }
+        //[NotMapped]
+        //public UserModel Manager { get; set; }
         public CompanyModel Company { get; set; }
-        public ICollection<UserModel> Users { get; set; }
-        public ICollection<WeekModel> Weeks { get; set; }        
+        public ICollection<UserModel> Employees { get; set; }
     }
 }
