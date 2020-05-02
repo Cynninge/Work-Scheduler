@@ -39,46 +39,48 @@ namespace WorkScheduler.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel viewModel)
         {
-            //IdentityRole identity = new IdentityRole
-            //{
-            //    Name = "Administrator"
-            //};
-            //await roleManager.CreateAsync(identity);
-            //var admin = new IdentityUser { UserName = "Administrator" };
-            //var adminresult = await userManager.CreateAsync(admin, "Administrator");
-            //await userManager.AddToRoleAsync(admin, "Administrator");
             if (ModelState.IsValid)
             {
-                //var user = new UserModel { UserName = viewModel.UserName,Email=viewModel.UserName, FirstName=viewModel.FirstName,LastName=viewModel.LastName};
                 var user = new UserModel 
-                { UserName = viewModel.Email,
-                Email = viewModel.Email,
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                Initials = viewModel.Initials};
+                { 
+                    UserName = viewModel.Email,
+                    Email = viewModel.Email,
+                    FirstName = viewModel.FirstName,
+                    LastName = viewModel.LastName,
+                    Initials = viewModel.Initials
+                };
 
                 var result = await userManager.CreateAsync(user, viewModel.Password);
                 if (result.Succeeded)
                 {
-                    var login = await signInManager.PasswordSignInAsync(viewModel.Email,
-                                        viewModel.Password, true, false);
-                    if (login.Succeeded)
+                    if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                        //tworzenie 365 dni dla uzytkownika
-                        //var currentYear = DateTime.Now.Year;
-                        //var dateIncrementation = new DateTime(currentYear, 1, 1);
-                        //for (int i = 1; i < 365; i++)
-                        //{                            
-                        //    var userDays = new DayModel();   
-                        //    _dayService.Create(userDays, user, dateIncrementation);
-                        //    dateIncrementation = dateIncrementation.AddDays(1);
-                        //}
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("ListUsers", "Administration");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Nie można się zalogować!");
-                    }
+                        var login = await signInManager.PasswordSignInAsync(viewModel.Email,
+                                        viewModel.Password, true, false);
+                        if (login.Succeeded)
+                        {
+                            #region
+                            //tworzenie 365 dni dla uzytkownika
+                            //var currentYear = DateTime.Now.Year;
+                            //var dateIncrementation = new DateTime(currentYear, 1, 1);
+                            //for (int i = 1; i < 365; i++)
+                            //{                            
+                            //    var userDays = new DayModel();   
+                            //    _dayService.Create(userDays, user, dateIncrementation);
+                            //    dateIncrementation = dateIncrementation.AddDays(1);
+                            //}
+                            #endregion
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Nie można się zalogować!");
+                        }
+                    }                    
                 }
                 foreach (var error in result.Errors)
                 {
@@ -120,29 +122,29 @@ namespace WorkScheduler.Controllers
         }
         
     
-        [HttpGet]
-        public async Task<IActionResult> EditUserData(EditUserDataViewModel user)
-        {
-            var currentUser = userManager.FindByNameAsync(user.Email);
-            await userManager.FindByIdAsync(User.Identity.Name);
-            //var claims = await userManager.GetClaimsAsync(r);
-            //model.FirstName = claims.Where(c => c.Type == "FirstName").Select(c => c.Value).ToString();
-            var claimsIdentity =  User.Identity as ClaimsIdentity;
-            if (claimsIdentity != null)
-            {
-                // the principal identity is a claims identity.
-                // now we need to find the NameIdentifier claim
-                var userIdClaim = claimsIdentity.Claims
-                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+        //[HttpGet]
+        //public async Task<IActionResult> EditUserData(EditUserViewModel user)
+        //{
+        //    var currentUser = userManager.FindByNameAsync(user.Email);
+        //    await userManager.FindByIdAsync(User.Identity.Name);
+        //    //var claims = await userManager.GetClaimsAsync(r);
+        //    //model.FirstName = claims.Where(c => c.Type == "FirstName").Select(c => c.Value).ToString();
+        //    var claimsIdentity =  User.Identity as ClaimsIdentity;
+        //    if (claimsIdentity != null)
+        //    {
+        //        // the principal identity is a claims identity.
+        //        // now we need to find the NameIdentifier claim
+        //        var userIdClaim = claimsIdentity.Claims
+        //            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 
-                if (userIdClaim != null)
-                {
-                    var userIdValue = userIdClaim.Value;
-                }
-            }
+        //        if (userIdClaim != null)
+        //        {
+        //            var userIdValue = userIdClaim.Value;
+        //        }
+        //    }
             
-            return View(user);
-        }
+        //    return View(user);
+        //}
 
         [HttpGet]
         [AllowAnonymous]

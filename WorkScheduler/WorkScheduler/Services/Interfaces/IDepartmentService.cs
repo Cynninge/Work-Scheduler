@@ -9,11 +9,11 @@ namespace WorkScheduler.Services.Interfaces
     public interface IDepartmentService
     {
         public bool Create(DepartmentModel department);
-        public DepartmentModel Get(int id);
+        public DepartmentModel Get(int departmentId);
         public IList<DepartmentModel> GetAll();
         public bool Update(DepartmentModel department);
-        public bool Delete(int id);
-        public List<UserModel> GetEmployees(int id);
+        public bool Delete(int departmentId);
+        public List<UserModel> GetEmployees(string name);
         public List<WorkHoursModel> GetEmployeesWorkHours(int id);
     }
 }

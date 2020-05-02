@@ -33,6 +33,18 @@ namespace WorkScheduler
                 builder.UseSqlServer(Configuration["DefaultConnection"]);
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DeleteRolePolicy",
+                    policy => policy.RequireClaim("Delete Role"));
+
+                options.AddPolicy("EditRolePolicy",
+                    policy => policy.RequireClaim("Edit Role"));
+
+                options.AddPolicy("CreateRolePolicy",
+                    policy => policy.RequireClaim("Create Role"));
+            });
+
             services.AddIdentity<UserModel, IdentityRole>().AddEntityFrameworkStores<EFCContext>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddMvc();
@@ -52,8 +64,8 @@ namespace WorkScheduler
 
             app.UseStaticFiles();            
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();            
 
             app.UseEndpoints(endpoints =>
             {

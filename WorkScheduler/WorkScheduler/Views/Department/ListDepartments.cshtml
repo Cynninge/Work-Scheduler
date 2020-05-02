@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Authorization;
+@model IEnumerable<DepartmentModel>
+
+@inject IAuthorizationService authorizationService
+
+@{
+    ViewBag.Title = "All Departments";
+}
+
+<h1>Departments list</h1>
+
+@if (Model.Any())
+{
+    <a class="btn btn-primary mb-3" style="width:auto" asp-action="Create" asp-controller="department">Add new department</a>
+
+    foreach (var department in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-heaer">
+                @department.ShortName
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@department.Name</h5>
+            </div>
+            <div class="card-footer">
+                <form asp-action="DeleteDepartment" asp-controller="Department" asp-route-departmentId="@department.DepartmentId" method="post">
+                    
+                        <a asp-action="EditDepartment" asp-controller="Department" asp-route-departmentId="@department.DepartmentId" class="btn btn-primary">Edit</a>                    
+                    
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete department: @department.Name')">Delete</button>
+                    
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No departments created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a department
+            </h5>
+            <a class="btn btn-primary" style="width:auto"
+               asp-controller="department" asp-action="Create">
+                Create department
+            </a>
+        </div>
+    </div>
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@

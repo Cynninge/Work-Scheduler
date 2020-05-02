@@ -1,0 +1,97 @@
+﻿@model WorkScheduler.Models.DepartmentModel
+
+@{
+    ViewBag.Title = "Edit Department";
+}
+
+<h1>Edit Department</h1>
+
+<form method="post" class="mt-3">
+    <div class="form-group row">
+        <label asp-for="DepartmentId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="DepartmentId" disabled class="form-control">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ShortName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="ShortName" class="form-control">
+            <span asp-validation-for="ShortName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="ListDepartments" asp-controller="Department" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3>Department employees</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Employees.Any())
+            {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <h5 class="card-title">First Name</h5>
+                        </th>
+                        <th>
+                            <h5 class="card-title">Last Name</h5>
+                        </th>
+                        <th>
+                            <h5 class="card-title">Position</h5>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => employee.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => employee.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => employee.Position)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@employee.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@employee.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@employee.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>  
+                </table>
+            }
+           
+            else
+            {
+                <h5 class="card-title">None at the moment</h5>
+            }
+</div>
+        <div class="card-footer">
+            <a asp-action="ManageDepartmentWorkers" asp-controller="Department" asp-route-departmentId="@Model.DepartmentId" style="width:auto" class="btn btn-primary">
+                Manage Workers
+            </a>
+        </div>
+    </div>
+</form>

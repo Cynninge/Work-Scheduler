@@ -21,9 +21,9 @@ namespace WorkScheduler.Services
             return _context.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int departmentId)
         {
-            var department = _context.Departments.SingleOrDefault(b => b.DepartmentId == id);
+            var department = _context.Departments.SingleOrDefault(b => b.DepartmentId == departmentId);
             if (department == null)
                 return false;
 
@@ -31,18 +31,18 @@ namespace WorkScheduler.Services
             return _context.SaveChanges() > 0;
         }
 
-        public List<UserModel> GetEmployees(int id)
+        public List<UserModel> GetEmployees(string name)
         {
-            return _context.Users.Where(x => x.Department.DepartmentId == id).ToList();
+            return _context.Users.Where(x => x.Department.Name == name).ToList();
         }
         public List<WorkHoursModel> GetEmployeesWorkHours(int id)
         {
             return _context.WorkHours.Where(x => x.Employee.Department.DepartmentId == id).ToList();
         }
 
-        public DepartmentModel Get(int id)
+        public DepartmentModel Get(int departmentId)
         {            
-            return _context.Departments.SingleOrDefault(b => b.DepartmentId == id);
+            return _context.Departments.SingleOrDefault(b => b.DepartmentId == departmentId);
         }
 
         public IList<DepartmentModel> GetAll()
