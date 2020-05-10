@@ -12,24 +12,21 @@
 
 @if (Model.Any())
 {
-    <a class="btn btn-primary mb-3" style="width:auto" asp-action="Create" asp-controller="department">Add new department</a>
+    <a class="btn btn-primary" style="width:auto" asp-action="Create" asp-controller="department">Add new department</a>
 
     foreach (var department in Model)
     {
-        <div class="card mb-3">
-            <div class="card-heaer">
+        <div class="card text-white bg-dark mb-3">
+            <div class="card-header">
                 @department.ShortName
             </div>
             <div class="card-body">
-                <h5 class="card-title">@department.Name</h5>
+                <h4 class="card-title">@department.Name</h4>                
             </div>
             <div class="card-footer">
-                <form asp-action="DeleteDepartment" asp-controller="Department" asp-route-departmentId="@department.DepartmentId" method="post">
-                    
-                        <a asp-action="EditDepartment" asp-controller="Department" asp-route-departmentId="@department.DepartmentId" class="btn btn-primary">Edit</a>                    
-                    
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete department: @department.Name')">Delete</button>
-                    
+                <form asp-action="DeleteDepartment" asp-controller="Department" asp-route-departmentId="@department.DepartmentId" method="post">                    
+                        <a asp-action="EditDepartment" asp-controller="Department" asp-route-departmentId="@department.DepartmentId" class="btn btn-primary">Edit</a>      
+                        <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete department: @department.Name')">Delete</button>                    
                 </form>
             </div>
         </div>

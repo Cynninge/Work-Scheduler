@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkScheduler.Context;
 
 namespace WorkScheduler.Migrations
 {
     [DbContext(typeof(EFCContext))]
-    partial class EFCContextModelSnapshot : ModelSnapshot
+    [Migration("20200502202743_DeleteNoAction")]
+    partial class DeleteNoAction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,13 +320,10 @@ namespace WorkScheduler.Migrations
                     b.Property<string>("AdditionalInfo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Date")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DisplayString")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeeId")

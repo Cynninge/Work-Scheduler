@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WorkScheduler.Models;
 using WorkScheduler.Services.Interfaces;
 using WorkScheduler.ViewModels;
 
@@ -11,13 +13,26 @@ namespace WorkScheduler.Controllers
 {
     public class UserWorkHoursController : Controller
     {
-        private readonly IUserWorkHoursViewModelService _userWorkHoursViewModelService;
-        //public UserWorkHoursController(IUserWorkHoursViewModelService userWorkHoursViewModelService)
-        //{
-        //    _userWorkHoursViewModelService = userWorkHoursViewModelService;
-        //}
-        // GET: UserWorkHours
-        public ActionResult Index()
+        private readonly IUserWorkHoursViewModelService userWorkHoursViewModelService;
+        private readonly IDepartmentService departmentService;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<UserModel> userManager;
+
+        public UserWorkHoursController(RoleManager<IdentityRole> roleManager,
+                                        UserManager<UserModel> userManager,
+                                        IDepartmentService departmentService,
+                                        IUserWorkHoursViewModelService userWorkHoursViewModelService)
+        {
+            this.roleManager = roleManager;
+            this.userManager = userManager;
+            this.departmentService = departmentService;
+            //public UserWorkHoursController(IUserWorkHoursViewModelService userWorkHoursViewModelService)
+            //{
+            //    _userWorkHoursViewModelService = userWorkHoursViewModelService;
+            //}
+            // GET: UserWorkHours
+        }
+            public ActionResult Index()
         {
             //var usersWorkHours = new UserWorkHoursViewModel();
             //usersWorkHours.
@@ -41,9 +56,14 @@ namespace WorkScheduler.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
+            
             try
             {
-                // TODO: Add insert logic here
+                
+                var hours = new WorkHoursModel
+                {                     
+                    
+                };
 
                 return RedirectToAction(nameof(Index));
             }

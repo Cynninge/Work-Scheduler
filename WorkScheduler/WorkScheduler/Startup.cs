@@ -47,6 +47,7 @@ namespace WorkScheduler
 
             services.AddIdentity<UserModel, IdentityRole>().AddEntityFrameworkStores<EFCContext>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<ICalendarService, CalendarService>();
             services.AddMvc();
         }
 

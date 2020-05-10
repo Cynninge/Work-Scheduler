@@ -7,7 +7,7 @@ using WorkScheduler.ViewModels;
 
 namespace WorkScheduler.Services.Interfaces
 {
-    interface IUserWorkHoursViewModelService
+    public interface IUserWorkHoursViewModelService
     {
         public IList<UserModel> DisplayWeek(DepartmentModel department);
     }

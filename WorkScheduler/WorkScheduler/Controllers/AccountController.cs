@@ -120,31 +120,6 @@ namespace WorkScheduler.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-        
-    
-        //[HttpGet]
-        //public async Task<IActionResult> EditUserData(EditUserViewModel user)
-        //{
-        //    var currentUser = userManager.FindByNameAsync(user.Email);
-        //    await userManager.FindByIdAsync(User.Identity.Name);
-        //    //var claims = await userManager.GetClaimsAsync(r);
-        //    //model.FirstName = claims.Where(c => c.Type == "FirstName").Select(c => c.Value).ToString();
-        //    var claimsIdentity =  User.Identity as ClaimsIdentity;
-        //    if (claimsIdentity != null)
-        //    {
-        //        // the principal identity is a claims identity.
-        //        // now we need to find the NameIdentifier claim
-        //        var userIdClaim = claimsIdentity.Claims
-        //            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-        //        if (userIdClaim != null)
-        //        {
-        //            var userIdValue = userIdClaim.Value;
-        //        }
-        //    }
-            
-        //    return View(user);
-        //}
 
         [HttpGet]
         [AllowAnonymous]
@@ -153,61 +128,102 @@ namespace WorkScheduler.Controllers
             return View();
         }
 
-        //[HttpPost]
+        [HttpGet]
+        [Authorize]
+        public IActionResult ListUsersLoggedAccount()
+        {
+            var users = userManager.Users;
+            return View(users);
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditUserData(string name)
+        {
+
+            var user = await userManager.FindByNameAsync(name);
+            
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User cannot be found";
+                return View("NotFound");
+            }         
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Initials = user.Initials,
+                PhoneNumber = user.PhoneNumber                
+            };
+
+            return View(model);
+            //var currentUser = userManager.FindByNameAsync(user.Id);
+
+
+            //await userManager.FindByIdAsync(User.Identity.Name);
+            //var claims = await userManager.GetClaimsAsync(r);
+            //user.FirstName = claims.Where(c => c.Type == "FirstName").Select(c => c.Value).ToString();
+            //var claimsIdentity = User.Identity as ClaimsIdentity;
+            //if (claimsIdentity != null)
+            //{
+            //    // the principal identity is a claims identity.
+            //    // now we need to find the NameIdentifier claim
+            //    var userIdClaim = claimsIdentity.Claims
+            //        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+            //    if (userIdClaim != null)
+            //    {
+            //        var userIdValue = userIdClaim.Value;
+            //    }
+            //}
+
+            //return View(user);
+        }
+       
+
+        [HttpPost]
         //[AutoValidateAntiforgeryToken]
-        //public async Task<IActionResult> EditUserData(EditUserDataViewModel model)
-        //{
-        //    // Validates the received password data based on the view model
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
+        public async Task<IActionResult> EditUserData(EditUserViewModel model)
+        {
+            var user = await userManager.FindByNameAsync(model.UserName);
 
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
+            if(ModelState.IsValid)
+            {
+                user.Id = model.Id;
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Initials = model.Initials;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Position = model.Position;
+                user.WorkTimePerWeek = model.WorkTimePerWeek;
 
-        //            //var user = User.Identity;
-        //            //user = new EditUserDataViewModel {FirstName=model.FirstName,LastName=model.LastName,Email=model.Email };
-        //            var r = await userManager.FindByNameAsync(User.Identity.Name);
-        //            var claims = await userManager.GetClaimsAsync(r);
-        //            var t = User;
-        //            await userManager.RemoveClaimsAsync(r, claims);
-        //            await userManager.AddClaimAsync(r, new Claim("FirstName", model.FirstName));
-        //            await userManager.AddClaimAsync(r, new Claim("LastName", model.LastName));
-        //            await userManager.GetClaimsAsync(r);
-        //            await userManager.ChangeEmailAsync(r, model.Email, "");
+                var result = await userManager.UpdateAsync(user);
 
-        //            //var result = userManager.UpdateAsync(r);
+                if (result.Succeeded)
+                {
+                    return Redirect("Index");
+                }
 
-        //            //var user = new UserModel();
-        //            //user.Id = r.Id;
-        //            //user.FirstName = model.FirstName;
-        //            //user.LastName = model.LastName;
-        //            // user.Email = model.Email;
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
 
-        //            //model.FirstName = 
-        //            //var result = await userManager.AddClaimAsync(r,new Claim("FirstName", model.FirstName));
-        //            //result = await userManager.AddClaimAsync(r, new Claim("LastName", model.LastName));
-        //            //result = await userManager.AddClaimAsync(r,new Claim("Email",model.Email));
-        //            var result = await userManager.UpdateAsync(r);
-
-        //            if (result.Succeeded)
-        //            {
-        //                return RedirectToAction("EditUserData", "Account");
-        //            }
-        //            else
-        //            {
-        //                return Redirect("Error");
-        //            }
-        //        }
-        //        return Redirect("Error");
-        //    }
-        //    catch
-        //    {
-        //        return View(model);
-        //    }
-        //}
+                return View(model);
+            }
+            else
+            {
+                ViewBag.ErrorMessage = $"User cannot be found";
+                return View("NotFound");                
+            }
+        }
     }
 }

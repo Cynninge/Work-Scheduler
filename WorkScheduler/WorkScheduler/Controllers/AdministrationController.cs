@@ -236,7 +236,7 @@ namespace WorkScheduler.Controllers
         [HttpGet]
         public IActionResult ListUsers()
         {
-            var users = userManager.Users;
+            var users = userManager.Users;            
             return View(users);
         }
 
@@ -248,7 +248,7 @@ namespace WorkScheduler.Controllers
 
             if (user == null)
             {
-                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                ViewBag.ErrorMessage = $"User cannot be found";
                 return View("NotFound");
             }
                         
@@ -256,7 +256,6 @@ namespace WorkScheduler.Controllers
             var userRoles = await userManager.GetRolesAsync(user);
             var userDepartments = departmentService.GetAll();
             
-
             var model = new EditUserViewModel
             {
                 Id = user.Id,
@@ -271,7 +270,7 @@ namespace WorkScheduler.Controllers
                 Departments = userDepartments,
                 Claims = userClaims.Select(c => c.Value).ToList(),
                 Roles = userRoles,
-                DepartmentName = user.Department.Name
+                DepartmentName = user.Department?.Name
             };
 
             return View(model);

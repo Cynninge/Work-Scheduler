@@ -1,0 +1,82 @@
+﻿@model WorkScheduler.Models.WorkHoursModel
+@section Scripts
+{
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
+}
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>WorkHoursModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <table>
+            <tbody>
+               
+                <form asp-action="Create">
+                    <tc>
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="StartHour" class="control-label"></label>
+                                <input asp-for="StartHour" class="form-control" />
+                                <span asp-validation-for="StartHour" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="StartMinutes" class="control-label"></label>
+                                <input asp-for="StartMinutes" class="form-control" />
+                                <span asp-validation-for="StartMinutes" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EndHour" class="control-label"></label>
+                                <input asp-for="EndHour" class="form-control" />
+                                <span asp-validation-for="EndHour" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EndMinutes" class="control-label"></label>
+                                <input asp-for="EndMinutes" class="form-control" />
+                                <span asp-validation-for="EndMinutes" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DayName" class="control-label"></label>
+                                <input asp-for="DayName" class="form-control" disabled />
+                                <span asp-validation-for="DayName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AdditionalInfo" class="control-label"></label>
+                                <input asp-for="AdditionalInfo" class="form-control" />
+                                <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="datepicker">
+                                <label asp-for="Date" class="control-label"></label>
+                                <input asp-for="Date" type="datetime" class="form-control" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                        }
+                        </tc>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
