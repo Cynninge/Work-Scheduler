@@ -314,8 +314,6 @@ namespace WorkScheduler.Controllers
             }
         }
 
-
-
         [HttpGet]
         public IActionResult CreateRole()
         {

@@ -32,8 +32,8 @@ namespace WorkScheduler.Models
         public int EndHour { get; set; } = 0;
         [Range(0, 59)]
         public int EndMinutes { get; set; } = 0;
-        public UserModel? Employee { get; set; } = null;
-        public string? DayName { get; set; } = "-";
+        public UserModel Employee { get; set; }
+        public string DayName { get; set; } = "-";
         //{
         //    get
         //    {
@@ -46,8 +46,8 @@ namespace WorkScheduler.Models
         //}
         public string AdditionalInfo { get; set; } = "-";
         [DataType(DataType.Date)]
-        public DateTime? Date { get; set; } = null;    
-        
-        public string DisplayString { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now;
+
+        public string DisplayString { get; set; } = "-";
     }
 }

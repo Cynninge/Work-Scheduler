@@ -2,78 +2,91 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<UserModel> signInManager;
 
-    <table class="table">
+    <table class="table" table-responsive table-hover>
         <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Initials)
                 </th>
                 @for (int i = 0; i <= 6; i++)
-            {
-                <th>
-                    @Html.DisplayFor(model => model.SevenDays[i].DayOfWeek)
-                </th>
-            }
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.SevenDays[i].DayOfWeek)
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (var employee in Model.Workers)
-        {
+            {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => employee.Initials)
                 </td>
+                @if (employee.WorkHours.Count() != 0)
+                {
+                    foreach (var day in Model.SevenDays)
+                    {
+            <td>
+                @if (employee.WorkHours.Any(x => x.Date == day.Date))
+                {
+                    @foreach (var hours in employee.WorkHours.Where(x => x.Date >= Model.StartWeek && x.Date <= Model.EndWeek.AddDays(6) && x.Date == day.Date))
+                    {
 
-                @foreach (var hours in employee.WorkHours@*.Where(x => x.Date >= Model.StartWeek && x.Date <= Model.EndWeek.AddDays(6))*@)
-            {
-                <td>
-                    @if (hours.Date != null)
-            {
-                    @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
-                {
-                    <a asp-action="Edit" asp-controller="WorkHours" asp-route-id="@hours.WorkHoursId">@Html.DisplayFor(modelItem => hours.DisplayString)</a>
-                }
-                else
-                {
-                    @Html.DisplayFor(modelItem => hours.DisplayString)
-                }
-            }
-            else
-            {
-                    @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
-                {
-                    <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
-                }
-                else
-                {
-                    @ViewBag.None
-                }
-            }
-
-
-                    @*@if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName && !(hours is null))
+                        @if (hours.Date == day)
                         {
-                            <a asp-action="Edit" asp-controller="WorkHours" asp-route-id="@hours.WorkHoursId">@Html.DisplayFor(modelItem => hours.DisplayString)</a>
-                        }
-                        else if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName && hours is null)
-                        {
-                            <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
-                        }
-                        else if (signInManager.IsSignedIn(User) && User.Identity.Name != employee.UserName && !(hours is null))
-                        {
-                            @Html.DisplayFor(modelItem => hours.DisplayString)
+                            @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                            {
+                                <a asp-action="Edit" asp-controller="WorkHours" asp-route-id="@hours.WorkHoursId">@Html.DisplayFor(modelItem => hours.DisplayString)</a>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => hours.DisplayString)
+                            }
                         }
                         else
                         {
-                            @Html.ViewBag.None
-                        }*@
-                </td>
+                            @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                            {
+                                <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
+                            }
+                            else
+                            {
+                                @ViewBag.None
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                    {
+                        <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
+                    }
+                    else
+                    {
+                        @ViewBag.None
+                    }
+                }
 
+            </td>
+                    }
+                        @*@for (int i = 0; i < 7 - employee.WorkHours.Count(); i++)
+                {
+                    <td>
+                        @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                        {
+                            <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
+                        }
+                        else if (signInManager.IsSignedIn(User) && User.Identity.Name != employee.UserName)
+                        {
+                            @ViewBag.none
+                        }
+                    </td>
+                }*@
+                    }
+
+                </tr>  
             }
-                <td>
-                    <a asp-action="Details" asp-route-id="@employee.Id">Details</a>
-                </td>
-            </tr>
-        }
         </tbody>
     </table>

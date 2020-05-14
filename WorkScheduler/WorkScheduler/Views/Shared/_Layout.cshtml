@@ -45,7 +45,7 @@
                             <a class="nav-link" asp-controller="Calendar" asp-action="ListDepartmentsForCalendar">Calendar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" asp-controller="Company" asp-action="Details">About</a>
                         </li>
                         @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
@@ -73,7 +73,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Account"
-                                       asp-action="EditUserData" asp-route-name="@User.Identity.Name">Profile</a>
+                                       asp-action="Details" asp-route-name="@User.Identity.Name">Profile</a>
                                     <a class="dropdown-item" asp-controller="Account"
                                        asp-action="LogOut">Log out</a>
                                 </div>

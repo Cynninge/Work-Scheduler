@@ -16,21 +16,48 @@ namespace WorkScheduler.Controllers
     {
         private readonly SignInManager<UserModel> signInManager;
         private readonly UserManager<UserModel> userManager;
+        private readonly IDepartmentService departmentService;
         //private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(SignInManager<UserModel> _signInManager, UserManager<UserModel> _userManager)
+        public AccountController(SignInManager<UserModel> _signInManager, UserManager<UserModel> _userManager, IDepartmentService departmentService)
         {
             signInManager = _signInManager;
             userManager = _userManager;
+            this.departmentService = departmentService;
             //roleManager = _roleManager;            
         }
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Details()
+        public async Task<IActionResult> Details(string name)
         {
-            return View();
+            var user = await userManager.FindByNameAsync(name);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User cannot be found";
+                return View("NotFound");
+            }
+
+            var userDepartments = departmentService.GetAll();
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Initials = user.Initials,
+                PhoneNumber = user.PhoneNumber,
+                WorkTimePerWeek = user.WorkTimePerWeek,
+                Position = user.Position,
+                Departments = userDepartments,                
+                DepartmentName = user.Department?.Name
+            };
+
+            return View(model);
         }
         public IActionResult Register()
         {
@@ -139,26 +166,31 @@ namespace WorkScheduler.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> EditUserData(string name)
+        public async Task<IActionResult> EditUserData(string id)
         {
-
-            var user = await userManager.FindByNameAsync(name);
+            var user = await userManager.FindByIdAsync(id);
             
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User cannot be found";
                 return View("NotFound");
-            }         
+            }
+
+            var userDepartments = departmentService.GetAll();
 
             var model = new EditUserViewModel
             {
                 Id = user.Id,
                 Email = user.Email,
-                UserName = user.Email,
+                UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Initials = user.Initials,
-                PhoneNumber = user.PhoneNumber                
+                PhoneNumber = user.PhoneNumber,
+                WorkTimePerWeek = user.WorkTimePerWeek,
+                Position = user.Position,
+                Departments = userDepartments,                
+                DepartmentName = user.Department?.Name
             };
 
             return View(model);
@@ -187,29 +219,32 @@ namespace WorkScheduler.Controllers
        
 
         [HttpPost]
-        //[AutoValidateAntiforgeryToken]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> EditUserData(EditUserViewModel model)
         {
-            var user = await userManager.FindByNameAsync(model.UserName);
+            var user = await userManager.FindByIdAsync(model.Id);
 
-            if(ModelState.IsValid)
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            else
             {
                 user.Id = model.Id;
-                user.UserName = model.UserName;
                 user.Email = model.Email;
                 user.UserName = model.Email;
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.Initials = model.Initials;
-                user.PhoneNumber = model.PhoneNumber;
-                user.Position = model.Position;
+                user.PhoneNumber = model.PhoneNumber;                
                 user.WorkTimePerWeek = model.WorkTimePerWeek;
 
                 var result = await userManager.UpdateAsync(user);
 
                 if (result.Succeeded)
                 {
-                    return Redirect("Index");
+                    return RedirectToAction("Success");
                 }
 
                 foreach (var error in result.Errors)
@@ -218,12 +253,13 @@ namespace WorkScheduler.Controllers
                 }
 
                 return View(model);
-            }
-            else
-            {
-                ViewBag.ErrorMessage = $"User cannot be found";
-                return View("NotFound");                
-            }
+            }           
+        }
+
+        [HttpGet]
+        public IActionResult Success()
+        {
+            return View();
         }
     }
 }

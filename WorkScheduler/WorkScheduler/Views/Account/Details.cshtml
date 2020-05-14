@@ -1,39 +1,66 @@
 ﻿@model WorkScheduler.ViewModels.EditUserViewModel
-@using Microsoft.AspNetCore.Identity;
+<br />
 @{
-    ViewData["Title"] = "User Details";
+    ViewData["Title"] = "Profile";
 }
 
-<h1>Details</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditUserData">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Email" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<h1>Profile</h1>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h4>
+    <hr />
+    <dl class="row">
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Position)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Initials)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Initials)
+        </dd>  
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WorkTimePerWeek)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.WorkTimePerWeek)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="EditUserData" asp-controller="Account" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index" asp-controller="Home">Back to List</a>
 </div>

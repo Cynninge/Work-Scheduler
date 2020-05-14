@@ -45,6 +45,8 @@ namespace WorkScheduler.Services
             return _context.Departments.SingleOrDefault(b => b.DepartmentId == departmentId);
         }
 
+       
+
         public IList<DepartmentModel> GetAll()
         {
             return _context.Departments.ToList();

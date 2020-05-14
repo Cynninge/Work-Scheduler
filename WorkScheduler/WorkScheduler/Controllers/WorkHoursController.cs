@@ -27,17 +27,13 @@ namespace WorkScheduler.Controllers
             this.roleManager = roleManager;
             this.userManager = userManager;
             _context = context;
-        }
+        }      
 
-      
-
-        // GET: WorkHours
         public async Task<IActionResult> Index()
         {
             return View(await _context.WorkHours.ToListAsync());
         }
 
-        // GET: WorkHours/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -55,36 +51,28 @@ namespace WorkScheduler.Controllers
             return View(workHoursModel);
         }
 
-        // GET: WorkHours/Create
         public IActionResult Create()
-        {
-            
-
+        {     
             return View();
         }
 
-        // POST: WorkHours/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WorkHoursId,StartHour,StartMinutes,EndHour,EndMinutes,DayName,AdditionalInfo,Date,Employee")] WorkHoursModel workHours, string id)
         {
-            var user = userManager.Users.Where(x => x.Id == id).FirstOrDefault();
-            workHours.Employee = user;            
+            var user = userManager.FindByIdAsync(id);
+            workHours.Employee = user.Result;            
             workHours.DayName = workHours.Date?.DayOfWeek.ToString();
-
 
             if (ModelState.IsValid)
             {               
                 _context.Add(workHours);
                 await _context.SaveChangesAsync();
-                return Redirect($"Calendar/Display/{user.Department.DepartmentId}");
+                return RedirectToAction("ListDepartmentsForCalendar", "Calendar");
             }
             return View(workHours);
         }
-
-        // GET: WorkHours/Edit/5
+                
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -100,9 +88,6 @@ namespace WorkScheduler.Controllers
             return View(workHoursModel);
         }
 
-        // POST: WorkHours/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("WorkHoursId,StartHour,StartMinutes,EndHour,EndMinutes,DayName,AdditionalInfo,Date")] WorkHoursModel workHoursModel)
@@ -135,7 +120,6 @@ namespace WorkScheduler.Controllers
             return View(workHoursModel);
         }
 
-        // GET: WorkHours/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -153,7 +137,6 @@ namespace WorkScheduler.Controllers
             return View(workHoursModel);
         }
 
-        // POST: WorkHours/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
