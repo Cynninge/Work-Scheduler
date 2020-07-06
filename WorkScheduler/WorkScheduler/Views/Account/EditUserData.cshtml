@@ -1,22 +1,17 @@
 ﻿@model WorkScheduler.ViewModels.EditUserViewModel
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserModel> signInManager;
 @{
     ViewBag.Title = "Edit User";
 }
-
+<br />
 <h1>Edit User</h1>
 
 <form method="post" class="mt-3">
-    <div class="form-group row">
+    <div class="form-group row" hidden>
         <label asp-for="Id" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input asp-for="Id" disabled class="form-control">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label asp-for="DepartmentName" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="DepartmentName" class="form-control" disabled>
         </div>
     </div>
     <div class="form-group row">
@@ -26,13 +21,6 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
-    @*<div class="form-group row">
-            <label asp-for="UserName" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-10">
-                <input asp-for="UserName" class="form-control">
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-        </div>*@
     <div class="form-group row">
         <label asp-for="FirstName" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
@@ -57,19 +45,6 @@
             <input asp-for="PhoneNumber" class="form-control">
         </div>
     </div>
-    <div class="form-group row">
-        <label asp-for="Position" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="Position" class="form-control">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label asp-for="WorkTimePerWeek" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="WorkTimePerWeek" class="form-control">
-        </div>
-    </div>
 
 
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -77,7 +52,7 @@
     <div class="form-group row">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Index"  class="btn btn-primary">Cancel</a>
+            <a asp-action="Details" asp-controller="Account" asp-route-name="@User.Identity.Name" class="btn btn-primary">Cancel</a>
         </div>
     </div>
 </form>

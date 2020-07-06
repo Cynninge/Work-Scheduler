@@ -25,41 +25,30 @@ namespace WorkScheduler.Controllers
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
-            this.departmentService = departmentService;
-            //public UserWorkHoursController(IUserWorkHoursViewModelService userWorkHoursViewModelService)
-            //{
-            //    _userWorkHoursViewModelService = userWorkHoursViewModelService;
-            //}
-            // GET: UserWorkHours
-        }
-            public ActionResult Index()
-        {
-            //var usersWorkHours = new UserWorkHoursViewModel();
-            //usersWorkHours.
-            return View();
+            this.departmentService = departmentService;            
         }
 
-        // GET: UserWorkHours/Details/5
+        public ActionResult Index()
+        {
+            return View();
+        }
+                
         public ActionResult Details(int id)
         {
             return View();
         }
-
-        // GET: UserWorkHours/Create
+                
         public ActionResult Create()
         {
             return View();
         }
-
-        // POST: UserWorkHours/Create
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
-        {
-            
+        {            
             try
-            {
-                
+            {                
                 var hours = new WorkHoursModel
                 {                     
                     
@@ -73,21 +62,17 @@ namespace WorkScheduler.Controllers
             }
         }
 
-        // GET: UserWorkHours/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
-
-        // POST: UserWorkHours/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -96,21 +81,17 @@ namespace WorkScheduler.Controllers
             }
         }
 
-        // GET: UserWorkHours/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: UserWorkHours/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch

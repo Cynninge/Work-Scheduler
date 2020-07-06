@@ -1,92 +1,108 @@
 ﻿@model WorkScheduler.ViewModels.CalendarViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<UserModel> signInManager;
+    <html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {                
+                $('#fullName').mouseover(function () {                    
+                    $('.fullNameDiv').fadeIn(500);
+                }).mouseout(function () {
+                    $('.fullNameDiv').fadeOut(500);
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <br />
+        @Html.ActionLink("<<<", "Display", "Calendar", new { departmentId = @Model.DepartmentId, dateFromString = Model.Date.AddDays(-7).ToString() }) |
+        @Html.ActionLink("CURRENT", "Display", "Calendar", new { departmentId = @Model.DepartmentId }) |
+        @Html.ActionLink(">>>", "Display", "Calendar", new { departmentId = @Model.DepartmentId, dateFromString = Model.Date.AddDays(7).ToString() })<br />
 
-    <table class="table" table-responsive table-hover>
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Initials)
-                </th>
-                @for (int i = 0; i <= 6; i++)
-                {
+        <span>@Html.DisplayFor(model => model.StartWeek) - </span><span>@Html.DisplayFor(model => model.EndWeek)</span>
+        <table class="table" table-responsive table-hover>
+            <thead>
+                <tr>
                     <th>
-                        @Html.DisplayFor(model => model.SevenDays[i].DayOfWeek)
+                        @Html.DisplayNameFor(model => model.Initials)
                     </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var employee in Model.Workers)
-            {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => employee.Initials)
-                </td>
-                @if (employee.WorkHours.Count() != 0)
-                {
-                    foreach (var day in Model.SevenDays)
+                    @for (int i = 0; i <= 6; i++)
                     {
-            <td>
-                @if (employee.WorkHours.Any(x => x.Date == day.Date))
+                        <th title="@Html.DisplayFor(model => model.SevenDays[i].Date.Date)">
+                            @Html.DisplayFor(model => model.SevenDays[i].DayOfWeek)
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model.Workers)
                 {
-                    @foreach (var hours in employee.WorkHours.Where(x => x.Date >= Model.StartWeek && x.Date <= Model.EndWeek.AddDays(6) && x.Date == day.Date))
-                    {
+                    <tr>
+                        <td id="fullName" title="@Html.DisplayFor(modelItem => employee.FirstName) @Html.DisplayFor(modelItem => employee.LastName)">
+                            @Html.DisplayFor(modelItem => employee.Initials)
+                            @*<label id="lblName" for="fullName" title="Full Name" style="display:none"> @Html.DisplayFor(modelItem => employee.FirstName) @Html.DisplayFor(modelItem => employee.LastName)</label>*@
+                        </td>
+                        @if (employee.WorkHours.Count() != 0)
+                        {
+                            foreach (var day in Model.SevenDays)
+                            {
+                                <td>
+                                    @if (employee.WorkHours.Any(x => x.Date == day.Date))
+                                    {
+                                        @foreach (var hours in employee.WorkHours.Where(x => x.Date >= Model.StartWeek && x.Date <= Model.EndWeek.AddDays(6) && x.Date == day.Date))
+                                        {
 
-                        @if (hours.Date == day)
-                        {
-                            @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
-                            {
-                                <a asp-action="Edit" asp-controller="WorkHours" asp-route-id="@hours.WorkHoursId">@Html.DisplayFor(modelItem => hours.DisplayString)</a>
-                            }
-                            else
-                            {
-                                @Html.DisplayFor(modelItem => hours.DisplayString)
-                            }
-                        }
-                        else
-                        {
-                            @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
-                            {
-                                <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
-                            }
-                            else
-                            {
-                                @ViewBag.None
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
-                    {
-                        <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
-                    }
-                    else
-                    {
-                        @ViewBag.None
-                    }
-                }
+                                            @if (hours.Date == day)
+                                            {
+                                                @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                                                {
+                                                    <a title="@Html.DisplayFor(modelItem => hours.AdditionalInfo) " asp-action="Edit" asp-controller="WorkHours" asp-route-id="@hours.WorkHoursId" asp-route-departmentId="@Model.DepartmentId">@Html.DisplayFor(modelItem => hours.DisplayString)</a>
+                                                }
+                                                else
+                                                {
+                                                    <span title="@Html.DisplayFor(modelItem => hours.AdditionalInfo)">@Html.DisplayFor(modelItem => hours.DisplayString)</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                                                {
+                                                    <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id" asp-route-departmentId="@Model.DepartmentId">Add</a>
+                                                }
+                                                else
+                                                {
+                                                    @ViewBag.None
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
+                                        {
+                                            <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id" asp-route-departmentId="@Model.DepartmentId">Add</a>
+                                        }
+                                        else
+                                        {
+                                            @ViewBag.None
+                                        }
+                                    }
 
-            </td>
-                    }
-                        @*@for (int i = 0; i < 7 - employee.WorkHours.Count(); i++)
-                {
-                    <td>
-                        @if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName)
-                        {
-                            <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
+                                </td>
+                            }
                         }
-                        else if (signInManager.IsSignedIn(User) && User.Identity.Name != employee.UserName)
-                        {
-                            @ViewBag.none
-                        }
-                    </td>
-                }*@
-                    }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </body>
+    </html>
 
-                </tr>  
-            }
-        </tbody>
-    </table>
+
+    @*<div class="toast show fullNameDiv" role="alert" aria-live="assertive" aria-atomic="true" style="display:none; position:absolute">
+        <div class="toast show">
+            @Html.DisplayFor(modelItem => employee.FirstName) @Html.DisplayFor(modelItem => employee.LastName)
+        </div>
+    </div>*@

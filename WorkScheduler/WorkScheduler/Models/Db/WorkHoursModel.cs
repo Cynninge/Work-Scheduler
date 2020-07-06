@@ -23,7 +23,7 @@ namespace WorkScheduler.Models
 
         [Key]
         public int WorkHoursId { get; set; } = 0;
-        //public int UserId { get; set; }
+       
         [Range(0, 23)]
         public int StartHour { get; set; } = 0;
         [Range(0, 59)]
@@ -34,20 +34,14 @@ namespace WorkScheduler.Models
         public int EndMinutes { get; set; } = 0;
         public UserModel Employee { get; set; }
         public string DayName { get; set; } = "-";
-        //{
-        //    get
-        //    {
-        //        return DayName;
-        //    }
-        //    set
-        //    {
-        //        DayName = Date.DayOfWeek.ToString();
-        //    }
-        //}
+       
         public string AdditionalInfo { get; set; } = "-";
         [DataType(DataType.Date)]
-        public DateTime? Date { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.Now;
 
         public string DisplayString { get; set; } = "-";
+        [DataType(DataType.Time)]
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
     }
 }

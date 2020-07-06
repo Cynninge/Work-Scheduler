@@ -25,6 +25,11 @@ namespace WorkScheduler.Controllers
             this.userManager = userManager;
             this.departmentService = departmentService;
         }
+        public IActionResult Details(int id)
+        {
+            var dep = departmentService.Get(id);
+            return View(dep);
+        }
         public IActionResult Index(DepartmentModel department)
         {
             UserWorkHoursViewModel userWorkHoursViewModel = new UserWorkHoursViewModel()
@@ -46,8 +51,7 @@ namespace WorkScheduler.Controllers
                 ViewBag.ErrorMessage = $"Department with {name} cannot be found";
                 return View("NotFound");
             }
-
-            //var userWorkHours = model.Where(x => x.);
+            
             var userWorkHoursModel = new UserWorkHoursViewModel()
             {
                 Name = name,
@@ -63,11 +67,13 @@ namespace WorkScheduler.Controllers
             var departmentsList = departmentService.GetAll();
             return View(departmentsList);
         }
+        [Authorize(Roles = "Admin, Manager")]
 
         public IActionResult Create()
         {
             return View();
         }
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name,ShortName")][FromForm] DepartmentModel departmentModel)
@@ -107,7 +113,7 @@ namespace WorkScheduler.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult EditDepartment(int departmentId)
         {
             var dep = departmentService.Get(departmentId);
@@ -119,7 +125,6 @@ namespace WorkScheduler.Controllers
             }
             else
             {
-                //var userDepartments = departmentService.GetAll();
                 var departmentWorkers = userManager.Users.Where(x => x.Department.DepartmentId == dep.DepartmentId);
 
                 var model = new DepartmentModel
@@ -136,7 +141,7 @@ namespace WorkScheduler.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult EditDepartment(DepartmentModel model)
         {
             var dep = departmentService.Get(model.DepartmentId);
@@ -165,6 +170,7 @@ namespace WorkScheduler.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult ManageDepartmentWorkers(int departmentId)
         {
             ViewBag.departmentId = departmentId;
@@ -206,6 +212,7 @@ namespace WorkScheduler.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> ManageDepartmentWorkers(List<DepartmentUsersViewModel> model, int departmentId)
         {
             var dep = departmentService.Get(departmentId);

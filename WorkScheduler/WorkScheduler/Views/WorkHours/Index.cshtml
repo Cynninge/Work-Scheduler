@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+<br />
+<h1>Your work hours</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table align-content-lg-center">
     <thead>
         <tr>
             <th>
@@ -61,9 +61,7 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.WorkHoursId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WorkHoursId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WorkHoursId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.WorkHoursId">Edit</a>
             </td>
         </tr>
 }

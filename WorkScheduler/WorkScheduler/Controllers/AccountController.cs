@@ -17,19 +17,20 @@ namespace WorkScheduler.Controllers
         private readonly SignInManager<UserModel> signInManager;
         private readonly UserManager<UserModel> userManager;
         private readonly IDepartmentService departmentService;
-        //private readonly RoleManager<IdentityRole> roleManager;
+        
 
         public AccountController(SignInManager<UserModel> _signInManager, UserManager<UserModel> _userManager, IDepartmentService departmentService)
         {
             signInManager = _signInManager;
             userManager = _userManager;
-            this.departmentService = departmentService;
-            //roleManager = _roleManager;            
+            this.departmentService = departmentService;              
         }
         public IActionResult Index()
         {
             return View();
         }
+
+        [HttpGet]
         public async Task<IActionResult> Details(string name)
         {
             var user = await userManager.FindByNameAsync(name);
@@ -59,6 +60,7 @@ namespace WorkScheduler.Controllers
 
             return View(model);
         }
+
         public IActionResult Register()
         {
             return View();
@@ -165,7 +167,7 @@ namespace WorkScheduler.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        
         public async Task<IActionResult> EditUserData(string id)
         {
             var user = await userManager.FindByIdAsync(id);
@@ -194,27 +196,7 @@ namespace WorkScheduler.Controllers
             };
 
             return View(model);
-            //var currentUser = userManager.FindByNameAsync(user.Id);
 
-
-            //await userManager.FindByIdAsync(User.Identity.Name);
-            //var claims = await userManager.GetClaimsAsync(r);
-            //user.FirstName = claims.Where(c => c.Type == "FirstName").Select(c => c.Value).ToString();
-            //var claimsIdentity = User.Identity as ClaimsIdentity;
-            //if (claimsIdentity != null)
-            //{
-            //    // the principal identity is a claims identity.
-            //    // now we need to find the NameIdentifier claim
-            //    var userIdClaim = claimsIdentity.Claims
-            //        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-            //    if (userIdClaim != null)
-            //    {
-            //        var userIdValue = userIdClaim.Value;
-            //    }
-            //}
-
-            //return View(user);
         }
        
 
@@ -237,8 +219,7 @@ namespace WorkScheduler.Controllers
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.Initials = model.Initials;
-                user.PhoneNumber = model.PhoneNumber;                
-                user.WorkTimePerWeek = model.WorkTimePerWeek;
+                user.PhoneNumber = model.PhoneNumber;  
 
                 var result = await userManager.UpdateAsync(user);
 

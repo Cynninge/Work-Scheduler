@@ -16,24 +16,25 @@
         <link rel="stylesheet" href="/resources/demos/style.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script>
-            $(function () {
-                $("#datepicker").datepicker();
-            });
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#fullName').mouseover(function () {
+                    $('#fullNameDiv').fadeIn(500);
+                }).mouseout(function () {
+                    $('#fullNameDiv').fadeOut(500);
+                })
+            })
         </script>
 
     </head>
     <body>
         <header>
-
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WorkScheduler</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarColor01">
-
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
@@ -45,7 +46,7 @@
                             <a class="nav-link" asp-controller="Calendar" asp-action="ListDepartmentsForCalendar">Calendar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Company" asp-action="Details">About</a>
+                            <a class="nav-link" asp-controller="Company" asp-action="About">About</a>
                         </li>
                         @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
@@ -59,6 +60,8 @@
                                        asp-action="ListUsers">Users</a>
                                     <a class="dropdown-item" asp-controller="Administration"
                                        asp-action="ListRoles">Roles</a>
+                                    <a class="dropdown-item" asp-controller="Company"
+                                       asp-action="Edit" asp-route-id="1">Company</a>
                                 </div>
                             </li>
                         }
@@ -87,61 +90,7 @@
                 </div>
             </nav>
 
-            @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WorkScheduler</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                        <ul class="navbar-nav flex-grow-2">
-                            @if (signInManager.IsSignedIn(User))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        @User.Identity.Name
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" asp-controller="Account"
-                                           asp-action="EditUserData" asp-route-name="@User.Identity.Name">Profile</a>
-                                        <a class="dropdown-item" asp-controller="Account"
-                                           asp-action="LogOut">Log out</a>
-                                    </div>
-                                </li>
-                            }
-                        </ul>
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="ListDepartments">Departments</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Calendar" asp-action="ListDepartmentsForCalendar">Calendars</a>
-                            </li>
-                            @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Manage
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" asp-controller="Administration"
-                                           asp-action="ListUsers">Users</a>
-                                        <a class="dropdown-item" asp-controller="Administration"
-                                           asp-action="ListRoles">Roles</a>
-                                    </div>
-                                </li>
-                            }
-                        </ul>
-
-                    </div>
-                </div>
-            </nav>*@
+           
         </header>
         <div class="container">
             <main role="main" class="pb-3">
@@ -171,7 +120,7 @@ else
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div class="container">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WorkScheduler</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -181,13 +130,19 @@ else
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link" asp-controller="Company" asp-action="About">About</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LogIn">LogIn</a>
+                                <a class="nav-link" asp-action="Details" asp-controller="Company" asp-route-id="1">Contact</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="LogIn">LogIn</a>
                             </li>
                         </ul>
                     </div>

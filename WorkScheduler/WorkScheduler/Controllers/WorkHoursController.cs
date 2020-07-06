@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using WorkScheduler.Context;
 using WorkScheduler.Models;
-using WorkScheduler.ViewModels;
 
 namespace WorkScheduler.Controllers
 {
-    
+
     public class WorkHoursController : Controller
     {
         private readonly EFCContext _context;
@@ -51,29 +46,30 @@ namespace WorkScheduler.Controllers
             return View(workHoursModel);
         }
 
-        public IActionResult Create()
-        {     
+        public IActionResult Create(int departmentId)
+        {
+            ViewBag.depId = departmentId;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkHoursId,StartHour,StartMinutes,EndHour,EndMinutes,DayName,AdditionalInfo,Date,Employee")] WorkHoursModel workHours, string id)
+        public async Task<IActionResult> Create([Bind("WorkHoursId,StartHour,StartMinutes,EndHour,EndMinutes,DayName,AdditionalInfo,Date,Employee")] WorkHoursModel workHours, string id, int departmentId)
         {
             var user = userManager.FindByIdAsync(id);
             workHours.Employee = user.Result;            
-            workHours.DayName = workHours.Date?.DayOfWeek.ToString();
+            workHours.DayName = workHours.Date.DayOfWeek.ToString();
 
             if (ModelState.IsValid)
             {               
                 _context.Add(workHours);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("ListDepartmentsForCalendar", "Calendar");
+                return Redirect($"/Calendar/Display?departmentId={departmentId}");
             }
             return View(workHours);
         }
                 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int departmentId)
         {
             if (id == null)
             {
@@ -85,12 +81,14 @@ namespace WorkScheduler.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.depId = departmentId;            
             return View(workHoursModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WorkHoursId,StartHour,StartMinutes,EndHour,EndMinutes,DayName,AdditionalInfo,Date")] WorkHoursModel workHoursModel)
+        public async Task<IActionResult> Edit(int id, int departmentId, [Bind("WorkHoursId,StartHour,StartMinutes,EndHour,EndMinutes,DayName,AdditionalInfo,Date")] WorkHoursModel workHoursModel)
         {
             if (id != workHoursModel.WorkHoursId)
             {
@@ -115,7 +113,8 @@ namespace WorkScheduler.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                
+                return Redirect($"/Calendar/Display?departmentId={departmentId}");
             }
             return View(workHoursModel);
         }

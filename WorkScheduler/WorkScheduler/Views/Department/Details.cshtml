@@ -1,4 +1,4 @@
-﻿@model WorkScheduler.ViewModels.UserWorkHoursViewModel
+﻿@model WorkScheduler.Models.DepartmentModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,17 +10,13 @@
     <h4>DepartmentModel</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Workers)
-        </dt>
-        <dd class = "col-sm-10">
+        <dt class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShortName)
         </dd>
-       
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WorkHours)
-        </dd>
-    </dl>
+        </dl>
 </div>
 <div>
     @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@

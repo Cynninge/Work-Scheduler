@@ -27,6 +27,42 @@ namespace WorkScheduler.Controllers
             this.userManager = userManager;
             this.departmentService = departmentService;
         }
+        [HttpGet]
+        public IActionResult Success()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User cannot be found";
+                return View("NotFound");
+            }
+
+            var userDepartments = departmentService.GetAll();
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Initials = user.Initials,
+                PhoneNumber = user.PhoneNumber,
+                WorkTimePerWeek = user.WorkTimePerWeek,
+                Position = user.Position,
+                Departments = userDepartments,
+                DepartmentName = user.Department?.Name
+            };
+
+            return View(model);
+        }
 
         [HttpGet]
         public async Task<IActionResult> ManageUserClaims(string userId)
@@ -38,16 +74,14 @@ namespace WorkScheduler.Controllers
                 ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
                 return View("NotFound");
             }
-
-            // UserManager service GetClaimsAsync method gets all the current claims of the user
+            
             var existingUserClaims = await userManager.GetClaimsAsync(user);
 
             var model = new UserClaimsViewModel
             {
                 UserId = userId
             };
-
-            // Loop through each claim we have in our application
+            
             foreach (Claim claim in ClaimsStoreModel.AllClaims)
             {
                 UserClaim userClaim = new UserClaim
@@ -55,8 +89,6 @@ namespace WorkScheduler.Controllers
                     ClaimType = claim.Type
                 };
 
-                // If the user has the claim, set IsSelected property to true, so the checkbox
-                // next to the claim is checked on the UI
                 if (existingUserClaims.Any(c => c.Type == claim.Type))
                 {
                     userClaim.IsSelected = true;
@@ -79,8 +111,7 @@ namespace WorkScheduler.Controllers
                 ViewBag.ErrorMessage = $"User with Id = {model.UserId} cannot be found";
                 return View("NotFound");
             }
-
-            // Get all the user existing claims and delete them
+            
             var claims = await userManager.GetClaimsAsync(user);
             var result = await userManager.RemoveClaimsAsync(user, claims);
 
@@ -89,8 +120,7 @@ namespace WorkScheduler.Controllers
                 ModelState.AddModelError("", "Cannot remove user existing claims");
                 return View(model);
             }
-
-            // Add all the claims that are selected on the UI
+            
             result = await userManager.AddClaimsAsync(user,
                 model.Cliams.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));
 
@@ -203,8 +233,7 @@ namespace WorkScheduler.Controllers
 
         }
 
-        [HttpPost]
-        [Authorize(Policy = "DeleteRolePolicy")]
+        [HttpPost]        
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);

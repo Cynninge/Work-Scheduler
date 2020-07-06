@@ -9,8 +9,7 @@ namespace WorkScheduler.Models
         public int DepartmentId { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
-        //[NotMapped]
-        //public UserModel Manager { get; set; }
+        
         public CompanyModel Company { get; set; }
         public ICollection<UserModel> Employees { get; set; }
     }

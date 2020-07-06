@@ -16,7 +16,7 @@ namespace WorkScheduler.Context
         public DbSet<CompanyModel> Company { get; set; }
         public DbSet<WorkHoursModel> WorkHours { get; set; }
         public DbSet<DepartmentModel> Departments { get; set; }
-        //public DbSet<UserModel> Employees { get; set; }      
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

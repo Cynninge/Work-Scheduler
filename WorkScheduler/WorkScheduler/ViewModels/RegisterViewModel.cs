@@ -22,6 +22,5 @@ namespace WorkScheduler.ViewModels
         public string LastName { get; set; }
         [Required]
         public string Initials { get; set; }
-
     }
 }

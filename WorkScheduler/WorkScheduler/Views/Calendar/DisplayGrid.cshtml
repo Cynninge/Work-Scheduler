@@ -50,24 +50,7 @@
                         {
                             @ViewBag.None
                         }
-
-
-                        @*@if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName && !(hours is null))
-                            {
-                                <a asp-action="Edit" asp-controller="WorkHours" asp-route-id="@hours.WorkHoursId">@Html.DisplayFor(modelItem => hours.DisplayString)</a>
-                            }
-                            else if (signInManager.IsSignedIn(User) && User.Identity.Name == employee.UserName && hours is null)
-                            {
-                                <a asp-action="Create" asp-controller="WorkHours" asp-route-id="@employee.Id">Add</a>
-                            }
-                            else if (signInManager.IsSignedIn(User) && User.Identity.Name != employee.UserName && !(hours is null))
-                            {
-                                @Html.DisplayFor(modelItem => hours.DisplayString)
-                            }
-                            else
-                            {
-                                @Html.ViewBag.None
-                            }*@
+                       
                     </td>
 
                 }

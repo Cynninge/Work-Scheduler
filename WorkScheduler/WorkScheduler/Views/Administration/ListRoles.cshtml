@@ -5,21 +5,21 @@
 @inject IAuthorizationService authorizationService
 
 @{
-    ViewBag.Title = "All Roles";
+    ViewBag.Title = "Roles";
 }
-
+    <br />
 <h1>All roles</h1>
 
 @if (Model.Any())
 {
-    <a class="btn-default" style="width:auto" asp-action="CreateRole" asp-controller="administration">Add new role</a>
+    <a class="btn btn-primary" style="width:auto" asp-action="CreateRole" asp-controller="administration">Add new role</a>
 
     foreach (var role in Model)
     {
-        <div class="card mb-3">
-            <div class="card-heaer">
+        <div class="card text-white bg-dark mb-3">
+            @*<div class="card-heaer">
                 Role Id : @role.Id
-            </div>
+            </div>*@
             <div class="card-body">
                 <h5 class="card-title">@role.Name</h5>
             </div>
@@ -31,7 +31,7 @@
                     }
                     @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
                     {
-                        <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete role: @role.Name')">Delete</button>
+                        <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete role: @role.Name')">Delete</button>
                     }                    
                 </form>
             </div>

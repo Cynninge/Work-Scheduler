@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -43,15 +44,17 @@ namespace WorkScheduler.Controllers
         }     
         
         [HttpGet]
-        public IActionResult OneWeekBack(CalendarViewModel calendar, DateTime setDate, int departmentId)
-        {            
-            return RedirectToAction("Display", "Calendar", new { setDate = setDate.AddDays(-7)});
+        public IActionResult OneWeekBack(DateTime date, int departmentId)
+        {
+            date = DateTime.Now;
+            date = date.AddDays(-7);
+            return RedirectToAction("Display", "Calendar", departmentId, date.ToString());
         }
 
         [HttpGet]
-        public IActionResult Display(CalendarViewModel calendar, int departmentId)
-        {
-            
+        [Authorize(Roles = "Admin, Manager, User")]
+        public IActionResult Display(CalendarViewModel calendar, int departmentId, string dateFromString)
+        {            
             ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
             ViewBag.None = "-";
             #region
@@ -71,8 +74,22 @@ namespace WorkScheduler.Controllers
 
             //--------------------------------------------------------------------------------------
             #endregion
-
-            var date = DateTime.Now;
+            var date = new DateTime();
+            if (dateFromString is null)
+            {
+                date = DateTime.Now;
+            }
+            else
+            {
+                date = DateTime.Parse(dateFromString);
+            }
+            
+            var checkDate = new DateTime(01,01,0001, 00,00,00);
+            if (date == checkDate)
+            {
+                date = DateTime.Now;
+            }
+            
             var dayOfWeek = (int)date.DayOfWeek - 1;
             if (dayOfWeek < 0) dayOfWeek = 6;
             
@@ -88,9 +105,7 @@ namespace WorkScheduler.Controllers
             {
                 sDays.Add(thisWeeksMonday.AddDays(i));
             }
-
-            //var user = userManager.FindByIdAsync(id);
-
+            
             var users = userManager.Users;
             var departments = departmentService.GetAll();
             var department = departmentService.Get(departmentId);
@@ -102,22 +117,7 @@ namespace WorkScheduler.Controllers
             {                
                 var workerHoursList = new List<WorkHoursModel>();
                 worker.WorkHours = new List<WorkHoursModel>();
-                //while (worker.WorkHours is null)
-                //{
-                //    var emptyDay = new WorkHoursModel()
-                //    {
-                //        AdditionalInfo = "",
-                //        Date = DateTime.Now.AddDays(0),
-                //        DayName = DateTime.Now.AddDays(0).DayOfWeek.ToString(),
-                //        DisplayString = "-",
-                //        Employee = worker,
-                //        StartHour = 0,
-                //        StartMinutes = 0,
-                //        EndHour = 0,
-                //        EndMinutes = 0,
-                //    };
-                //    worker.WorkHours.Add(emptyDay);
-                //}                
+                
 
                 while (worker.WorkHours.Count() < 5)
                 {
@@ -137,7 +137,7 @@ namespace WorkScheduler.Controllers
                     worker.WorkHours.Add(emptyDay);
                 }
                 worker.WorkHours.OrderBy(x => x.WorkHoursId);
-            }            
+            }
 
             foreach (var item in workHours)
             {
@@ -150,7 +150,7 @@ namespace WorkScheduler.Controllers
                 sb.Append(":");
                 sb.Append(item.EndMinutes.ToString("00"));
                 item.DisplayString = sb.ToString();
-            }     
+            }
 
             calendar = new CalendarViewModel
             {
@@ -161,7 +161,8 @@ namespace WorkScheduler.Controllers
                 DepartmentName = department.Name,
                 StartWeek = thisWeeksMonday,
                 EndWeek = thisWeeksMonday.AddDays(6),
-                SevenDays = sDays
+                SevenDays = sDays,
+                Date = date                
             };       
             return View(calendar);
         }
